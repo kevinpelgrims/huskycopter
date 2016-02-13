@@ -21,7 +21,8 @@ public class SoundManager {
 
     private Context context;
     private SoundPool soundPool;
-    private float volume = 0.5f;
+    private float volume;
+    private float maximumVolume;
 
     private SparseArrayCompat<Boolean> preLoadedSounds = new SparseArrayCompat<>(1);
 
@@ -64,6 +65,7 @@ public class SoundManager {
     private void initializeVolume() {
         final AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
         volume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+        maximumVolume = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
     }
 
     private void preLoadSounds() {
@@ -118,5 +120,19 @@ public class SoundManager {
     public void stopHusky() {
         Log.d(TAG, "Stop playing husky sound");
         stopSound(huskyPlayId);
+    }
+
+    public void increaseHuskyVolume() {
+        if (volume < maximumVolume) {
+            volume += 0.1f;
+            soundPool.setVolume(huskyPlayId, volume, volume);
+        }
+    }
+
+    public void decreaseHuskyVolume() {
+        if (volume > 0.0f) {
+            volume -= 0.1;
+            soundPool.setVolume(huskyPlayId, volume, volume);
+        }
     }
 }
