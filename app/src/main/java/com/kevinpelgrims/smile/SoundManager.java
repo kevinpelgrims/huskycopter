@@ -6,6 +6,7 @@ import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Build;
+import android.os.Handler;
 import android.support.v4.util.SparseArrayCompat;
 import android.util.Log;
 
@@ -104,6 +105,13 @@ public class SoundManager {
         }
         else {
             Log.d(TAG, "Husky sound was not loaded yet");
+            // Yes, I know, I risk an infinite loop here. But let's just assume the sound will be loaded soon.
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    playHusky();
+                }
+            }, 1000);
         }
     }
 
